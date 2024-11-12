@@ -1,4 +1,12 @@
+from enum import Enum
 from typing import List, Tuple
+
+
+class Direction(Enum):
+    UP = (0, -1)
+    DOWN = (0, 1)
+    LEFT = (-1, 0)
+    RIGHT = (1, 0)
 
 
 class Player:
@@ -140,9 +148,33 @@ class Player:
             self.health = 0
         return damage
 
+    def move(self, direction: Direction) -> bool:
+        """
+        Перемещает персонажа
+        :param direction: направление
+        :return: True если переместился, False если нет
+        """
+        current_player_position = self.position
+        new_position_x = current_player_position[0] + direction.value[0]
+        new_position_y = current_player_position[1] + direction.value[1]
+        new_position = (new_position_x, new_position_y)
+        try:
+            self.position = new_position
+            return True
+        except ValueError:
+            return False
+
     def __repr__(self):
         return f'<Игрок {self.name} - (здоровье - {self.health}, атака - {self.attack}, защита - {self.defense})>'
 
+    def __str__(self):
+        return (f"Персонаж: {self.name}\n"
+                f"Здоровье: {self.health}\n"
+                f"Атака: {self.attack}\n"
+                f"Защита: {self.defense}\n"
+                f"Текущая позиция: {self.position}")
+
 
 player1 = Player('Odin', 10, 50, (0, 0))
+player1.move(Direction.DOWN)
 print(player1)
